@@ -2,7 +2,7 @@
 paths:
   - "agent-foundation/**"
 ---
-<!-- Managed by ZairenkaiPrjctX/.github agent-foundation v1.0.0. Edit the central template, then re-sync. -->
+<!-- Managed by ZairenkaiPrjctX/.github agent-foundation v1.1.0. Edit the central template, then re-sync. -->
 # Rule: editing the central agent foundation
 
 - `agent-foundation/standards/` is canonical. Repository policies and templates restate it

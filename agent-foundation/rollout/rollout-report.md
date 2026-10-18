@@ -63,3 +63,17 @@ observable after push).
 | `.github` is private, so organization-wide community health files and profile README in it do not take effect. | Maintainer: decide whether to make it public. |
 | Every project profile is Unverified. | Each repository: run `/repo-audit` when code lands, then set `code_present: true`. |
 | GitHub "Verified" status not yet observed. | Check commits on GitHub; compare key fingerprint above. |
+
+## Update v1.1.0 (2026-10-18)
+- After push, GitHub reported all 15 initial commits as `verified: true, reason: valid`
+  (checked via the commits API). The "Verified status not yet observed" item is closed.
+- Added `agent-foundation/allowed_signers` with the Claude Code cloud signing key, and
+  `--allowed-signers` support in `verify_commit_signature.py`. Tested:
+  `git verify-commit` → `Good "git" signature for noreply@anthropic.com`; a file listing the key
+  for a different principal → exit 1 (untrusted).
+- At the account owner's request, every commit now ends with
+  `Signed-off-by: FebriCahyaa <febricahya12345@gmail.com>` (replacing `Signed-By:`). The v1.0.0
+  commits keep their original trailer; published history was not rewritten.
+- Not done, by design: no new SSH/GPG keys were generated and nothing was added to the GitHub
+  account. This session can't reach account settings, and keys generated in an ephemeral
+  container would be lost.

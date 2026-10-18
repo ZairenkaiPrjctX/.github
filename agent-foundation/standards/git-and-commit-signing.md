@@ -8,23 +8,29 @@
 - Do not change default branches, repository visibility, or ownership.
 
 ## Commit messages
-Imperative subject line, at most 72 characters, then a body explaining *why*. Agent-created
-commits end with these trailers:
+Imperative subject line, at most 72 characters, then a body explaining *why*. **Every** commit
+in a Zairenkai repository ends with this trailer (set by the account owner, 2026-10-18):
 
 ```
-Signed-By: <GitHub username of the human who directed the work, as resolved from the authenticated account>
+Signed-off-by: FebriCahyaa <febricahya12345@gmail.com>
+```
+
+Agent-created commits add, after it:
+
+```
 Co-Authored-By: <model name actually used, if known> <noreply@anthropic.com>
 Claude-Session: <URL of the current session, if one exists>
 ```
 
-- Resolve the username from the authenticated GitHub account; do not assume the organization
-  name is a user name.
+- `git commit -s` adds a `Signed-off-by` line for the *configured* git identity, which for agents
+  is not the owner. Write the trailer above explicitly instead.
 - Name the model only if the runtime states it. Do not copy a model name from an old commit.
 - Omit `Claude-Session` when no current session URL exists. Never reuse a stale one.
 
-## `Signed-By` is not a signature
-`Signed-By:` is plain text. Anyone can type it. It does **not** make a commit cryptographically
-signed and does **not** produce GitHub's "Verified" badge.
+## `Signed-off-by` is not a signature
+`Signed-off-by:` is plain text (a Developer Certificate of Origin style sign-off). Anyone can type
+it. It does **not** make a commit cryptographically signed and does **not** produce GitHub's
+"Verified" badge.
 
 ## Cryptographic signing (required)
 - Commits must be signed with SSH or GPG (`commit.gpgsign=true`, `gpg.format`, `user.signingkey`).
@@ -35,10 +41,19 @@ signed and does **not** produce GitHub's "Verified" badge.
   `commit.gpgsign=false`, and never describe an unsigned commit as signed.
 - Never generate signing keys or tokens as part of repository work, and never commit them.
 
+## Trusted signing keys
+`agent-foundation/allowed_signers` lists the public keys trusted to sign commits (OpenSSH
+allowed-signers format, public keys only). Add a key only with evidence that it belongs to the
+named principal, e.g. a commit GitHub reports as verified. Never put a private key there.
+
 ## Verifying a signature independently
-1. Locally: `git log --show-signature -1` (needs `gpg.ssh.allowedSignersFile` for SSH keys),
-   or run `agent-foundation/scripts/verify_commit_signature.py <repo> <rev>`, which checks the
-   SSH signature against the public key embedded in it and prints the key fingerprint.
-2. On GitHub: open the commit; "Verified" appears only if the signing key is registered to a
+1. Locally with git (needs `ssh-keygen`):
+   `git -c gpg.ssh.allowedSignersFile=<path>/agent-foundation/allowed_signers verify-commit <rev>`
+   (in Claude Code cloud sessions also pass `-c gpg.ssh.program=ssh-keygen`, because the
+   configured signing helper cannot verify).
+2. Without `ssh-keygen`: `agent-foundation/scripts/verify_commit_signature.py <repo> <rev>
+   --allowed-signers agent-foundation/allowed_signers` checks the signature, prints the key
+   fingerprint, and fails if the key is not trusted for the committer email.
+3. On GitHub: open the commit; "Verified" appears only if the signing key is registered to a
    GitHub account whose verified email matches the committer email. Compare the fingerprint from
-   step 1 with the key listed in that account's settings.
+   step 1 or 2 with the key listed in that account's settings.

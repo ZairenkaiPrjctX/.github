@@ -82,6 +82,20 @@ class SignatureTest(unittest.TestCase):
         self.assertTrue(sig.ed25519_verify(pub, s, b""))
         self.assertFalse(sig.ed25519_verify(pub, s, b"x"))
 
+    def test_allowed_signers_parsing(self):
+        f = Path(tempfile.mkdtemp()) / "allowed"
+        f.write_text('# c\n'
+                     'a@x namespaces="git" ssh-ed25519 KEYA\n'
+                     'a@x namespaces="file" ssh-ed25519 KEYB\n'
+                     'b@x,a@x ssh-ed25519 KEYC\n')
+        self.assertEqual(sig.allowed_keys(f, "a@x"), {"KEYA", "KEYC"})
+        self.assertEqual(sig.allowed_keys(f, "z@x"), set())
+        shutil.rmtree(f.parent)
+
+    def test_repo_allowed_signers_file_is_well_formed(self):
+        f = Path(__file__).resolve().parents[2] / "allowed_signers"
+        self.assertTrue(sig.allowed_keys(f, "noreply@anthropic.com"))
+
     def test_unsigned_commit(self):
         ok, msg = sig.verify("tree abc\nauthor a <a> 0 +0000\n\nmsg\n")
         self.assertFalse(ok)

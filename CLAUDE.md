@@ -21,7 +21,7 @@ Until that changes:
 | Purpose | Command | Status |
 |---|---|---|
 | Build | — | Not Configured |
-| Test (foundation scripts) | `python3 -m unittest discover -s agent-foundation/scripts/tests` | Verified. Evidence: 8 tests OK, 2026-10-18 |
+| Test (foundation scripts) | `python3 -m unittest discover -s agent-foundation/scripts/tests` | Verified. Evidence: 10 tests OK, 2026-10-18 |
 | Lint / format | — | Not Configured |
 | Validate agent foundation | `python3 <path-to-.github>/agent-foundation/scripts/validate_agent_setup.py .` | Configured |
 | Sync foundation into checkouts | `python3 agent-foundation/scripts/sync_agent_foundation.py --root <dir>` | Configured |

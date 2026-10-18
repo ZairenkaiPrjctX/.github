@@ -11,6 +11,7 @@ the 15 `ZairenkaiPrjctX` repositories.
 | `templates/SKILL.md`, `templates/task-prompt.md` | Starting points for authoring a new skill or prompt |
 | `inventory/repositories.json` | Machine-readable repository list, evidence, and status ([rendered table](inventory/repositories.md)) |
 | `rollout/` | [Implementation plan](rollout/implementation-plan.md) and [rollout report](rollout/rollout-report.md) |
+| `allowed_signers` | Trusted public signing keys for `git verify-commit` |
 | `scripts/` | `sync_agent_foundation.py`, `validate_agent_setup.py`, `verify_commit_signature.py`, tests |
 
 All scripts use only the Python 3 standard library.
@@ -42,6 +43,7 @@ Exit code 1 means errors. Warnings (e.g. drift) do not fail unless `--strict` is
 
 ## Verifying a commit signature
 ```
-python3 agent-foundation/scripts/verify_commit_signature.py <repo> <rev>
+git -c gpg.ssh.allowedSignersFile=agent-foundation/allowed_signers verify-commit <rev>
+python3 agent-foundation/scripts/verify_commit_signature.py <repo> <rev> --allowed-signers agent-foundation/allowed_signers
 ```
-Prints the signing key fingerprint. GitHub's "Verified" badge is confirmed only on GitHub.
+The script needs no `ssh-keygen` and prints the signing key fingerprint. GitHub's "Verified" badge is confirmed only on GitHub.

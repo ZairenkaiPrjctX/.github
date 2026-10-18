@@ -6,13 +6,20 @@ the key's SHA256 fingerprint. Compare that fingerprint with the signing key regi
 GitHub (or in your allowed-signers file): a valid signature only proves the commit was
 signed by *that* key, not who owns it.
 
-Usage: verify_commit_signature.py REPO [REV]     (exit 0 = valid, 1 = invalid/unsigned)
+Usage: verify_commit_signature.py REPO [REV] [--allowed-signers FILE]
+       (exit 0 = valid, 1 = invalid/unsigned/untrusted)
+
+With --allowed-signers, the signing key must also be listed in FILE (OpenSSH allowed-signers
+format, e.g. agent-foundation/allowed_signers) for the committer's email.
 """
+import argparse
 import base64
 import hashlib
+import re
 import struct
 import subprocess
 import sys
+from pathlib import Path
 
 # Ed25519 verification (RFC 8032, section 5.1.7), pure Python.
 P = 2 ** 255 - 19
@@ -92,7 +99,7 @@ def split_commit(raw):
 
 
 def verify(raw):
-    """Return (ok, message) for a raw commit object."""
+    """Return (ok, message[, key_b64]) for a raw commit object."""
     payload, sig = split_commit(raw)
     if not sig:
         return False, "UNSIGNED: commit has no gpgsig header"
@@ -118,17 +125,50 @@ def verify(raw):
     fp = base64.b64encode(hashlib.sha256(pub).digest()).decode().rstrip("=")
     if namespace != b"git" or not ed25519_verify(key, raw_sig, signed):
         return False, f"INVALID signature (key SHA256:{fp})"
-    return True, f"VALID ssh-ed25519 signature, key SHA256:{fp}"
+    return True, f"VALID ssh-ed25519 signature, key SHA256:{fp}", base64.b64encode(pub).decode()
+
+
+def committer_email(raw):
+    for line in raw.split("\n"):
+        if line.startswith("committer "):
+            return line[line.index("<") + 1:line.index(">")]
+        if not line:
+            break
+    return ""
+
+
+def allowed_keys(path, email):
+    """Return the base64 ed25519 keys FILE allows for EMAIL with the git namespace."""
+    keys = set()
+    for line in Path(path).read_text().splitlines():
+        parts = line.split()
+        if not parts or parts[0].startswith("#"):
+            continue
+        principals = parts[0].split(",")
+        opts = parts[1] if len(parts) > 3 else ""
+        m = re.search(r'namespaces="([^"]*)"', opts)
+        if m and "git" not in m.group(1).split(","):
+            continue
+        if email in principals or "*" in principals:
+            keys.add(parts[-1])
+    return keys
 
 
 def main(argv):
-    if not argv or len(argv) > 2:
-        print(__doc__)
-        return 2
-    rev = argv[1] if len(argv) == 2 else "HEAD"
-    raw = subprocess.check_output(["git", "-C", argv[0], "cat-file", "commit", rev]).decode()
-    ok, msg = verify(raw)
-    print(f"{rev}: {msg}")
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("repo")
+    ap.add_argument("rev", nargs="?", default="HEAD")
+    ap.add_argument("--allowed-signers", type=Path)
+    args = ap.parse_args(argv)
+    raw = subprocess.check_output(["git", "-C", args.repo, "cat-file", "commit", args.rev]).decode()
+    ok, msg, *key = verify(raw)
+    if ok and args.allowed_signers:
+        email = committer_email(raw)
+        if key[0] not in allowed_keys(args.allowed_signers, email):
+            ok, msg = False, f"UNTRUSTED: {msg}, but not listed for <{email}> in {args.allowed_signers}"
+        else:
+            msg += f", trusted for <{email}>"
+    print(f"{args.rev}: {msg}")
     return 0 if ok else 1
 
 

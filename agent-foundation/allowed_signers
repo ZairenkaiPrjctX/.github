@@ -1,0 +1,10 @@
+# SSH allowed-signers file for verifying signed commits in ZairenkaiPrjctX repositories.
+# Format: <principal email> namespaces="git" <public key>   (public keys only, never private)
+#
+# Usage:
+#   git -c gpg.ssh.allowedSignersFile=<path-to>/allowed_signers verify-commit <rev>
+#   git -c gpg.ssh.allowedSignersFile=<path-to>/allowed_signers log --show-signature -1
+#
+# Claude Code cloud signing key (environment-managed; SHA256:32dP45eSMmVSt/G/CGvcxl/P+MO3Nwj9xeTh/GSA2wc).
+# Evidence: extracted from signatures that GitHub reports as verified=true, reason=valid (2026-10-18).
+noreply@anthropic.com namespaces="git" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKy87HxSEheG8vEPhSs9u2KZCtVErAQfpmprtUJCZ2w7
