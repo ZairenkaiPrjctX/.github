@@ -13,7 +13,7 @@ Organization: `ZairenkaiPrjctX`. Foundation version: 1.1.0. Surveyed: 2026-10-18
 | `.github` | (none) | no | initialized | Organization policies, reusable configuration, templates, and agent-foundation governance. |
 | `Zairenkai-Release` | Release Build Zairenkai | no | initialized | Release automation, artifacts, signing, and publication. |
 | `Zairenkai-FAS` | Zairenkai Tweaks FAS kernel module | no | initialized | FAS implementation and its integration interfaces (description says kernel module). |
-| `Zairenkai-Database-Source` | (none) | no | initialized | Database schemas, data provenance, formats, and validation. |
+| `Zairenkai-Database-Source` | (none) | yes | initialized | AFID: Android firmware metadata catalog (thermal/power components); see the repository's AGENT/PROJECT_CONTEXT.md. |
 | `ZairenkaiPrjctX.github.io` | (none) | no | initialized | Organization website: framework, build, content, and GitHub Pages deployment. |
 | `Zairenkai-Sdk` | (none) | no | initialized | Public APIs, compatibility guarantees, SDK build and publishing. |
 | `Zairenkai-Core` | Core Zairenkai | no | initialized | Core architecture and its consumers. |

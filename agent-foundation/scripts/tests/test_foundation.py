@@ -74,6 +74,16 @@ class FoundationTest(unittest.TestCase):
         self.assertTrue(any("code_present=false" in e for e in reports[0].errors))
 
 
+    def test_environment_directories_are_ignored(self):
+        (self.repo / ".venv/lib/pkg").mkdir(parents=True)
+        (self.repo / ".venv/lib/pkg/README.md").write_text("[x](missing.md)\nline\nline\nline\n")
+        self.assertEqual(self.errors(), [])
+        reports = [val.check_repo(self.repo)]
+        val.check_inventory({"foundation_version": "1.0.0", "repositories": [REPO]}, self.root,
+                            reports)
+        self.assertEqual(reports[0].errors, [])
+
+
 class SignatureTest(unittest.TestCase):
     def test_rfc8032_vector_1(self):
         pub = bytes.fromhex("d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a")

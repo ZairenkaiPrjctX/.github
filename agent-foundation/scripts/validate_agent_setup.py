@@ -11,6 +11,8 @@ import argparse
 import hashlib
 import json
 import re
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -37,6 +39,21 @@ PLACEHOLDER = re.compile(r"\{\{[a-z_]+\}\}")
 LINK = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 FOUNDATION_DIRS = ("AGENT/", ".claude/", "agent-foundation/")
 FOUNDATION_FILES = {"CLAUDE.md", "AGENTS.md", ".gitignore"}
+
+
+SKIP_DIRS = {".git", ".venv", "venv", "node_modules", "__pycache__", ".tox", ".mypy_cache"}
+
+
+def repo_files(path):
+    """Files Git would track (respecting .gitignore); without git, skip common env dirs."""
+    if shutil.which("git") and (path / ".git").exists():
+        proc = subprocess.run(["git", "-C", str(path), "ls-files", "-z", "--cached", "--others",
+                               "--exclude-standard"], capture_output=True, check=False)
+        if proc.returncode == 0:
+            return sorted(p for p in (path / f for f in proc.stdout.decode().split("\0") if f)
+                          if p.is_file())
+    return sorted(p for p in path.rglob("*")
+                  if p.is_file() and not SKIP_DIRS & set(p.relative_to(path).parts))
 
 
 class Report:
@@ -155,7 +172,7 @@ def check_repo(path):
                 r.error(f"prompt {f.name}: missing section '{sec}'")
 
     # Central templates contain placeholders on purpose; only rendered files are checked.
-    docs = [p for p in path.rglob("*.md") if ".git" not in p.parts
+    docs = [p for p in repo_files(path) if p.suffix == ".md"
             and not p.relative_to(path).as_posix().startswith("agent-foundation/templates/")]
     for f in docs:
         rel = f.relative_to(path).as_posix()
@@ -192,9 +209,7 @@ def check_repo(path):
 def code_files(path, manifest):
     known = set(manifest.get("managed", {})) | set(manifest.get("seeded", [])) | {"AGENT/.foundation-manifest.json"}
     out = []
-    for f in path.rglob("*"):
-        if not f.is_file() or ".git" in f.relative_to(path).parts:
-            continue
+    for f in repo_files(path):
         rel = f.relative_to(path).as_posix()
         if rel in known or rel in FOUNDATION_FILES or rel.startswith(FOUNDATION_DIRS):
             continue
