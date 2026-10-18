@@ -1,0 +1,252 @@
+{
+  "organization": "ZairenkaiPrjctX",
+  "foundation_version": "1.0.0",
+  "surveyed": "2026-10-18",
+  "repositories": [
+    {
+      "name": "Zairenkai-Docs",
+      "github_description": "",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Documentation for the Zairenkai project: structure and content-quality conventions.",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "Which documentation tool (if any) builds the docs, and where is it published?",
+        "Which repositories' behaviour do these docs describe, and who keeps them in sync?"
+      ]
+    },
+    {
+      "name": "Zairenkai-Modules",
+      "github_description": "",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Modules: identify the actual module types, supported runtimes, and packaging.",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "What is a 'module' here (e.g. Magisk/KernelSU module, kernel module, app plugin)? Confirm from `module.prop`, `Android.bp`, or similar.",
+        "How are modules packaged and installed, and what is the uninstall/rollback path?"
+      ]
+    },
+    {
+      "name": "Zairenkai-ART",
+      "github_description": "",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Assets/resources: identify actual formats and production workflows. (ART may not mean 'artwork'; verify.)",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "What does 'ART' denote: graphic assets, Android Runtime tuning, or something else? Confirm from file contents.",
+        "Which source formats are authoritative, and which files are exported/generated?"
+      ]
+    },
+    {
+      "name": "Zairenkai-ThermalTools",
+      "github_description": "",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Thermal tooling: device thermal data, formats, and verification procedures.",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "Which devices and thermal interfaces (sysfs paths, thermal-engine configs) are targeted?",
+        "How are thermal changes verified safely on hardware, and how are they reverted?"
+      ]
+    },
+    {
+      "name": ".github",
+      "github_description": "",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Organization policies, reusable configuration, templates, and agent-foundation governance.",
+      "related_repositories": [],
+      "optional_templates": [
+        ".claude/agents/foundation-auditor.md",
+        ".claude/rules/agent-foundation.md"
+      ],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "Should organization-wide community health files live here? They take effect only if this repository is public.",
+        "Who approves changes to `agent-foundation/standards/`?"
+      ]
+    },
+    {
+      "name": "Zairenkai-Release",
+      "github_description": "Release Build Zairenkai",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Release automation, artifacts, signing, and publication.",
+      "related_repositories": [],
+      "optional_templates": [
+        "AGENT/playbooks/release-process.md"
+      ],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "Which repositories and revisions feed a release build?",
+        "Where are release artifacts published, and which named secret signs them?"
+      ]
+    },
+    {
+      "name": "Zairenkai-FAS",
+      "github_description": "Zairenkai Tweaks FAS kernel module",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "FAS implementation and its integration interfaces (description says kernel module).",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "The description says 'FAS kernel module': which kernel versions and build system (Kbuild, DKMS, vendor tree) are targeted?",
+        "What userspace interface (sysfs, procfs, ioctl) does it expose, and who consumes it?"
+      ]
+    },
+    {
+      "name": "Zairenkai-Database-Source",
+      "github_description": "",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Database schemas, data provenance, formats, and validation.",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "What kind of database is this (SQL schema, device-profile data, other) and what format are records in?",
+        "Where does the data come from (provenance) and how is it validated before use?"
+      ]
+    },
+    {
+      "name": "ZairenkaiPrjctX.github.io",
+      "github_description": "",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Organization website: framework, build, content, and GitHub Pages deployment.",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "Which static-site framework builds the site, and does GitHub Pages deploy it? Pages on a private repository depends on the plan; verify.",
+        "Which content is authored here versus pulled from Zairenkai-Docs?"
+      ]
+    },
+    {
+      "name": "Zairenkai-Sdk",
+      "github_description": "",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Public APIs, compatibility guarantees, SDK build and publishing.",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "Which languages/platforms does the SDK target, and what is its public API surface?",
+        "What compatibility (semver) promise is made, and how is the SDK published?"
+      ]
+    },
+    {
+      "name": "Zairenkai-Core",
+      "github_description": "Core Zairenkai",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Core architecture and its consumers.",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "What functionality is 'core', and which repositories depend on it?",
+        "Is it a library, a daemon, a module, or something else? Confirm from entry points."
+      ]
+    },
+    {
+      "name": "Zairenkai-Intelligence-Engine",
+      "github_description": "AI Zairenkai",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Model, orchestration, or inference functionality; confirm scope before documenting.",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "The description says 'AI Zairenkai': does this contain models, inference code, heuristics, or orchestration? Confirm before documenting scope.",
+        "Does it process user or device data, and where is that data sent or stored?"
+      ]
+    },
+    {
+      "name": "Zairenkai-App",
+      "github_description": "ZairenkaiPrjctX Source",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Application architecture, UI, build system, tests, platform compatibility.",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "Which platform and UI toolchain (e.g. Android/Gradle) is used? Confirm from build files.",
+        "Which other repositories does the app call or bundle (Core, Sdk, License-Server)?"
+      ]
+    },
+    {
+      "name": "Zairenkai-License-Server",
+      "github_description": "",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Authentication, licensing, API authorization, secret handling, server tests.",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "Which framework and runtime, and how are licences issued, validated, and revoked?",
+        "Where do signing keys and credentials live (named secrets only), and is enforcement server-side?"
+      ]
+    },
+    {
+      "name": "Zairenkai-Graphics-Platform",
+      "github_description": "GPU Tweaks Zairenkai",
+      "visibility": "private",
+      "configured_default_branch": "main",
+      "code_present": false,
+      "evidence": "GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.",
+      "role_hint_unverified": "Graphics APIs, GPU tweaks, hardware interfaces, platform boundaries.",
+      "related_repositories": [],
+      "optional_templates": [],
+      "foundation_status": "initialized",
+      "open_questions": [
+        "The description says 'GPU Tweaks Zairenkai': which GPU vendors/drivers and which interfaces (sysfs, driver props) are touched?",
+        "How are graphics changes verified on hardware and rolled back?"
+      ]
+    }
+  ]
+}
